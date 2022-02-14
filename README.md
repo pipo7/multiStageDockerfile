@@ -19,3 +19,19 @@ docker build -t scratchimage .# multiStageDockerfile
  docker build --target buildstage1 -t myimage:latest .
  VS
  docker build --target buildstage2 -t myfinalimag2:latest .
+
+
+ # another example:
+ You can pick up where a previous stage left off by referring to it when using the FROM directive. For example:
+
+# syntax=docker/dockerfile:1
+FROM alpine:latest AS builder
+RUN apk --no-cache add build-base
+
+FROM builder AS build1
+COPY source1.cpp source.cpp
+RUN g++ -o /binary source.cpp
+
+FROM builder AS build2
+COPY source2.cpp source.cpp
+RUN g++ -o /binary source.cpp
