@@ -1,0 +1,18 @@
+# Start by building the application.
+FROM golang:1.17-bullseye as buildwithdebug
+WORKDIR /app
+ADD . /app
+RUN go get -d -v ./...
+RUN go build -o demo
+
+# Now copy it into our base image i.e distroless and contains minimal packages.
+# Distroless images are minimal and lack shell access. The :debug image set for each language provides a busybox shell to enter.
+# add :debug
+# then  build and launch with an shell entrypoint as :
+# $ docker build -t my_debug_image .
+# $ docker run --entrypoint=sh -ti my_debug_image
+FROM gcr.io/distroless/base-debian11:debug
+COPY --from=buildwithdebug /app /
+CMD ["./demo"]
+
+# Output is docker run -ti my_debug_image --> # hello world using go:linkname!

@@ -1,0 +1,13 @@
+# Start by building the application.
+FROM golang:1.17-bullseye as buildwithdebug
+WORKDIR /app
+ADD . /app
+RUN go get -d -v ./...
+RUN go build -o demo
+
+# Now copy it into our base image ...from scratch ...and we copy only binary(s) here.
+FROM scratch
+COPY --from=buildwithdebug /app /
+CMD ["./demo"]
+
+# Output is docker run -ti my_scratch_image --> # hello world using go:linkname!
