@@ -13,3 +13,9 @@ docker build -t distrolessDebianDebugimage .
 # OR
 Dockerfile.test3 rename to Dockerfile  and run 
 docker build -t scratchimage .# multiStageDockerfile
+
+# Check that final image size is far less than overall image 
+# You can test by running a particular stage and compare image sizes for example , in Dockerfile.test3
+ docker build --target buildstage1 -t myimage:latest .
+ VS
+ docker build --target buildstage2 -t myfinalimag2:latest .
